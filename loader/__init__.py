@@ -12,9 +12,10 @@
 #
 
 import os
-from games.utils.system_utils import searchForMaxIteration
-from games.scene.gaussian_model import GaussianModel
-from games.arguments import ModelParams
+from games_submodule.utils.system_utils import searchForMaxIteration
+from games_submodule.scene.gaussian_model import GaussianModel
+from games_submodule.arguments import ModelParams
+
 
 class GaussiansLoader:
 
