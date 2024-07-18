@@ -21,11 +21,11 @@ class GaussiansLoader:
 
     gaussians : GaussianModel
 
-    def __init__(self, args : ModelParams, gaussians : GaussianModel, load_iteration):
+    def __init__(self, model_path, gaussians : GaussianModel, load_iteration):
         """b
         :param path: Path to colmap loader main folder.
         """
-        self.model_path = args.model_path
+        self.model_path = model_path
         self.gaussians = gaussians
 
         if load_iteration == -1:
@@ -40,4 +40,9 @@ class GaussiansLoader:
             "iteration_" + str(self.loaded_iter),
             "point_cloud.ply")
         )
+
+        if hasattr(self.gaussians, 'prepare_vertices'):
+            self.gaussians.prepare_vertices()
+        if hasattr(self.gaussians, 'prepare_scaling_rot'):
+            self.gaussians.prepare_scaling_rot()
 
