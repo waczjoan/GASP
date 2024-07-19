@@ -8,6 +8,7 @@ import os
 
 def parse_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--in-dir', type=str, help='Input folder')
     parser.add_argument('-o', '--out-dir', type=str, help='Output folder')
     args = parser.parse_args()
     print(args)
@@ -46,7 +47,7 @@ ti.init()
 
 gui = ti.GUI("Taichi Elements", res=512, background_color=0x112F41)
 
-pts = torch.load('simulations/2d/jumpingjacks/jumpingjacks_vertices_xz.pt').cpu().numpy()
+pts = torch.load(f'{args.in_dir}/jumpingjacks_vertices_xz.pt').cpu().numpy()
 
 scaler = Rescale()
 scaler.fit(pts)
