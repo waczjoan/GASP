@@ -8,6 +8,7 @@ import os
 
 def parse_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--in-dir', type=str, help='Input folder')
     parser.add_argument('-o', '--out-dir', type=str, help='Output folder')
     args = parser.parse_args()
     print(args)
@@ -46,7 +47,7 @@ ti.init(arch=ti.gpu, device_memory_GB=12)
 
 gui = ti.GUI("Taichi Elements", res=512, background_color=0x112F41)
 
-pts = torch.load(f'{args.out_dir}/gs_flat____vertices_fish_cup.pt').cpu().numpy()
+pts = torch.load(f'{args.in_dir}/gs_flat____vertices_fish_cup.pt').cpu().numpy()
 pts[:, 1] = -pts[:, 1]
 pts = pts[:, [0, 2, 1]]
 scaler = Rescale()
@@ -63,7 +64,6 @@ for frame in range(200):
     colors = np.array([0x068587, 0xED553B, 0xEEEEF0, 0xFFFF00],
                       dtype=np.uint32)
     particles = mpm.particle_info()
-    # mpm.write_particles(f'{args.out_dir}/positions/{frame:05d}.npz')
     np_x = particles['position']
     screen_x = (np_x[:, 0]) #((np_x[:, 0] + np_x[:, 2]) / 2**0.5) - 0.2
     screen_y = (np_x[:, 1])
