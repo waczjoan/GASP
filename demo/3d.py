@@ -42,14 +42,15 @@ if write_to_disk:
     os.makedirs(f'{args.out_dir}/positions', exist_ok=True)
     os.makedirs(f'{args.out_dir}/img', exist_ok=True)
 
-ti.init(arch=ti.gpu, device_memory_GB=12) 
-# ti.init()
+# ti.init(arch=ti.gpu, device_memory_fraction=0.9) 
+ti.init()
 
 gui = ti.GUI("Taichi Elements", res=512, background_color=0x112F41)
 
 pts = torch.load(f'{args.in_dir}/gs_flat____vertices_fish_cup.pt').cpu().numpy()
 pts[:, 1] = -pts[:, 1]
 pts = pts[:, [0, 2, 1]]
+pts = pts[:3000]
 scaler = Rescale()
 scaler.fit(pts)
 pts = scaler.transform(pts)
@@ -59,10 +60,35 @@ mpm = MPMSolver(res=(128, 128, 128), E_scale=7e3)
 mpm.add_particles(particles=pts,
                   material=MPMSolver.material_elastic)
 
+# clamp %
+#
+def calc_scales(x):
+    scales = x.reshape((-1, 3, 3))
+    scales = scales - np.expand_dims(scales[:, 0, :], -2)
+    scales = np.linalg.norm(scales, axis=-1)
+    return x.flatten()
+
+def modify_positions(init_scales, new_scales):
+    for i in range(mpm.n_particles[None] // 3):
+        m = mpm.x[3*i]
+        for j in [1, 2]:
+            idx = 3 * i + j
+            v = mpm.x[idx] - m
+            if new_scales[idx] / init_scales[idx] < 0.5:
+                pos = mpm.x[idx]
+                mpm.x[idx] = pos - 0.5 * init_scales[idx] * v
+            elif new_scales[idx] / init_scales[idx] > 1.5:
+                pos = mpm.x[idx]
+                mpm.x[idx] = pos + 1.5 * init_scales[idx] * v
+
+init_scales = calc_scales(pts)
 for frame in range(200):
     mpm.step(1e-2)
     colors = np.array([0x068587, 0xED553B, 0xEEEEF0, 0xFFFF00],
                       dtype=np.uint32)
+    particles = mpm.particle_info()
+    new_scales = calc_scales(particles['position'])
+    modify_positions(init_scales, new_scales)
     particles = mpm.particle_info()
     np_x = particles['position']
     screen_x = (np_x[:, 0]) #((np_x[:, 0] + np_x[:, 2]) / 2**0.5) - 0.2
