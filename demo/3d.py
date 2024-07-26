@@ -6,6 +6,8 @@ from engine.mpm_solver import MPMSolver
 import argparse
 import os
 
+threshold = 2.0
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--in-dir', type=str, help='Input folder')
@@ -69,8 +71,8 @@ def calc_scales(x):
     return scales.flatten()
 
 @ti.kernel
-def modify_positions(threshold: int):
-    for i in range(mpm.n_particles // 3):
+def modify_positions():
+    for i in range(mpm.n_particles[None] // 3):
         m = mpm.x[3 * i]
         for j in ti.static(range(1, 3)):
             idx = 3 * i + j
@@ -89,7 +91,7 @@ for frame in range(200):
                       dtype=np.uint32)
     particles = mpm.particle_info()
     new_scales.from_numpy(calc_scales(particles['position']))
-    modify_positions(threshold=2.0)
+    modify_positions()
     particles = mpm.particle_info()
     np_x = particles['position']
     screen_x = (np_x[:, 0]) #((np_x[:, 0] + np_x[:, 2]) / 2**0.5) - 0.2
