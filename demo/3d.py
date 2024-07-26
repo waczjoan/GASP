@@ -80,8 +80,7 @@ def modify_positions():
             norm = diff.norm()
             v = diff / norm
             if new_scales[idx] / init_scales[idx] > threshold:
-                pos = mpm.x[idx]
-                mpm.x[idx] = pos + threshold * init_scales[idx] * v
+                mpm.x[idx] = m + threshold * init_scales[idx] * v
 
 init_scales.from_numpy(calc_scales(pts))
 
