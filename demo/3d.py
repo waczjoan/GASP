@@ -21,7 +21,7 @@ args = parse_args()
 def save_positions_pt(positions, iteration):
     positions = scaler.inverse(positions)
     positions_tensor = torch.from_numpy(positions)
-    filename = args.out_dir + f'/positions/{iteration:04d}.pt'
+    filename = args.out_dir + f'/{iteration:04d}.pt'
     torch.save(positions_tensor, filename)
 
 class Rescale:
@@ -41,10 +41,10 @@ class Rescale:
 
 write_to_disk = args.out_dir is not None
 if write_to_disk:
-    os.makedirs(f'{args.out_dir}/positions', exist_ok=True)
+    os.makedirs(f'{args.out_dir}/triangles', exist_ok=True)
     os.makedirs(f'{args.out_dir}/img', exist_ok=True)
 
-ti.init(arch=ti.gpu, device_memory_fraction=0.8) 
+ti.init(arch=ti.gpu, device_memory_fraction=0.9) 
 # ti.init()
 
 gui = ti.GUI("Taichi Elements", res=512, background_color=0x112F41, show_gui=False)
@@ -56,7 +56,7 @@ scaler = Rescale()
 scaler.fit(pts)
 pts = scaler.transform(pts)
 
-mpm = MPMSolver(res=(64, 64, 64), E_scale=1)
+mpm = MPMSolver(res=(128, 128, 128), E_scale=1)
 
 mpm.add_particles(particles=pts,
                   material=MPMSolver.material_elastic)
