@@ -121,4 +121,5 @@ for frame in range(200):
     gui.circles(screen_pos,
                 radius=1.5,
                 color=colors[particles['material']])
-    gui.show(f'{args.out_dir}/img/{frame:06d}.png' if write_to_disk else None)
+    for out_dir in args.out_dir:
+        gui.show(f'{out_dir}/img/{frame:06d}.png' if write_to_disk else None)
