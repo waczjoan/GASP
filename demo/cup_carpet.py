@@ -65,7 +65,7 @@ if write_to_disk:
 
 ti.init(arch=ti.gpu, device_memory_fraction=0.9) 
 
-gui = ti.GUI("Taichi Elements", res=512, background_color=0x112F41, show_gui=True)
+gui = ti.GUI("Taichi Elements", res=512, background_color=0x112F41, show_gui=False)
 
 mpm = MPMSolver(res=(64, 64, 64), E_scale=1)
 
