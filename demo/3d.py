@@ -21,7 +21,7 @@ args = parse_args()
 def save_positions_pt(positions, iteration):
     positions = scaler.inverse(positions)
     positions_tensor = torch.from_numpy(positions)
-    filename = args.out_dir + f'/{material}/triangles/{iteration:04d}.pt'
+    filename = args.out_dir + f'/{material_name}/triangles/{iteration:04d}.pt'
     torch.save(positions_tensor, filename)
 
 class Rescale:
