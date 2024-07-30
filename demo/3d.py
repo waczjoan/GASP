@@ -39,6 +39,8 @@ class Rescale:
     def inverse(self, x):
         return 2 * (x - np.array([0.25, 0.5, 0.25])) * (self.max - self.min) + self.min
 
+ti.init(arch=ti.gpu, device_memory_fraction=0.9) 
+
 material_list = [
     ('elastic', MPMSolver.material_elastic),
     ('sand', MPMSolver.material_sand),
@@ -51,8 +53,6 @@ for material_name, material in material_list:
     if write_to_disk:
         os.makedirs(f'{args.out_dir}/{material_name}/triangles', exist_ok=True)
         os.makedirs(f'{args.out_dir}/{material_name}/img', exist_ok=True)
-
-    ti.init(arch=ti.gpu, device_memory_fraction=0.9) 
 
     gui = ti.GUI("Taichi Elements", res=512, background_color=0x112F41, show_gui=False)
 
