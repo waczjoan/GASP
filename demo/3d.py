@@ -39,10 +39,17 @@ class Rescale:
     def inverse(self, x):
         return 2 * (x - np.array([0.25, 0.5, 0.25])) * (self.max - self.min) + self.min
 
-for material in [MPMSolver.material_elastic, MPMSolver.material_sand, MPMSolver.material_snow, MPMSolver.material_water]:
+material_list = [
+    ('elastic', MPMSolver.material_elastic),
+    ('sand', MPMSolver.material_sand),
+    ('snow', MPMSolver.material_snow),
+    ('water', MPMSolver.material_water)
+]
+
+for material_name, material in material_list:
     write_to_disk = args.out_dir is not None
     if write_to_disk:
-        os.makedirs(f'{args.out_dir}/{material}/triangles', exist_ok=True)
+        os.makedirs(f'{args.out_dir}/{material_name}/triangles', exist_ok=True)
         os.makedirs(f'{args.out_dir}/{material}/img', exist_ok=True)
 
     ti.init(arch=ti.gpu, device_memory_fraction=0.9) 
@@ -100,4 +107,4 @@ for material in [MPMSolver.material_elastic, MPMSolver.material_sand, MPMSolver.
         gui.circles(screen_pos,
                     radius=1.5,
                     color=colors[particles['material']])
-        gui.show(f'{args.out_dir}/img/{frame:06d}.png' if write_to_disk else None)
+        gui.show(f'{args.out_dir}/{material_name}/img/{frame:06d}.png' if write_to_disk else None)
