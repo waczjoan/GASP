@@ -50,7 +50,7 @@ for material_name, material in material_list:
     write_to_disk = args.out_dir is not None
     if write_to_disk:
         os.makedirs(f'{args.out_dir}/{material_name}/triangles', exist_ok=True)
-        os.makedirs(f'{args.out_dir}/{material}/img', exist_ok=True)
+        os.makedirs(f'{args.out_dir}/{material_name}/img', exist_ok=True)
 
     ti.init(arch=ti.gpu, device_memory_fraction=0.9) 
 
