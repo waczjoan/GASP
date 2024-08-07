@@ -6,20 +6,21 @@ from engine.mpm_solver import MPMSolver
 import argparse
 import os
 
-threshold = 2.0
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--in-dir', type=str, help='Input folder')
     parser.add_argument('-o', '--out-dir', type=str, help='Output folder')
     parser.add_argument('--material', type=str, help='material type')
     parser.add_argument('--E', type=float, help='youngs modulus')
+    parser.add_argument('--threshold', type=float, default=1.0, help='threshold')
     parser.add_argument('--skip', type=int, default=8)
     args = parser.parse_args()
     print(args)
     return args
 
 args = parse_args()
+
+threshold = args.threshold
 
 def save_positions_pt(positions, iteration):
     positions = scaler.inverse(positions)
