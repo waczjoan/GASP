@@ -24,10 +24,10 @@ import torchvision
 import trimesh
 from utils.general_utils import safe_state
 from argparse import ArgumentParser
-from arguments import ModelParams, PipelineParams, get_combined_args
+from arguments import ModelParams, PipelineParams
 from games.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
 import copy
-
+from gargs import get_combined_args
 
 def transform_vertices_function(vertices, c=1):
     vertices = vertices[:, [0, 2, 1]]
@@ -121,8 +121,8 @@ def render_sets(
                 gaussians.prepare_scaling_rot()
             gaussians_list.append(copy.deepcopy(gaussians))
             if dataset == datasets[0]:
-                train_view = scene.getTrainCameras()[4]
-                test_view = scene.getTestCameras()[4]
+                train_view = scene.getTrainCameras()[3]
+                test_view = scene.getTestCameras()[3]
             loaded_iters.append(scene.loaded_iter)
             del scene
             #scene_list.append(scene)
@@ -166,8 +166,9 @@ if __name__ == "__main__":
     args = []
     sym_dirname = {}
     for i, sym_dirname_i in zip(arguments.model_paths, arguments.sym_dirnames):
-        parser.__setattr__("model_path", i)
-        args.append(get_combined_args(parser))
+        arguments.model_path = i
+        _arg = get_combined_args(arguments)
+        args.append(_arg)
         sym_dirname[i] = sym_dirname_i
     model.gs_type = args[0].gs_type
     print("Rendering " + str(arguments.model_paths))
