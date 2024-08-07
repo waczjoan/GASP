@@ -14,6 +14,7 @@ def parse_args():
     parser.add_argument('-o', '--out-dir', type=str, help='Output folder')
     parser.add_argument('--material', type=str, help='material type')
     parser.add_argument('--E', type=float, help='youngs modulus')
+    parser.add_argument('--skip', type=int, default=8)
     args = parser.parse_args()
     print(args)
     return args
@@ -39,7 +40,7 @@ class Rescale:
         return 0.5 * (x - self.min) / (self.max - self.min) + np.array([0.25, 0.5, 0.25])
     
     def inverse(self, x):
-        return 2 * (x - np.array([0.25, 0.5, 0.25])) * (self.max - self.min) + self.min
+        return 2 * x * (self.max - self.min)
 
 ti.init(arch=ti.gpu, device_memory_fraction=0.9) 
 
@@ -65,7 +66,7 @@ scaler = Rescale()
 scaler.fit(pts)
 pts = scaler.transform(pts)
 
-mpm = MPMSolver(res=(64, 64, 64), E_scale=args.E)
+mpm = MPMSolver(res=(128, 128, 128), E_scale=args.E)
 
 mpm.add_particles(particles=pts,
                 material=material)
@@ -90,8 +91,6 @@ def modify_positions():
             v = diff / norm
             if new_scales[idx] / init_scales[idx] > threshold:
                 mpm.x[idx] = m + threshold * init_scales[idx] * v
-
-init_scales.from_numpy(calc_scales(pts))
 
 for frame in range(200):
     mpm.step(1e-2)
