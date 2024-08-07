@@ -10,8 +10,10 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--in-dir', type=str, nargs='+', default=[], help='Input folder')
     parser.add_argument('-o', '--out-dir', type=str, nargs='+', default=[], help='Output folder')
-    parser.add_argument('--material', type=str, help='material type')
-    parser.add_argument('--E', type=float, help='youngs modulus')
+    parser.add_argument('--scales', type=float, nargs='+')
+    parser.add_argument('--offsets', type=float, nargs='+')
+    parser.add_argument('--material', type=str, default='elastic', help='material type')
+    parser.add_argument('--E', type=float, default=1.0, help='youngs modulus')
     parser.add_argument('--threshold', type=float, default=1.0, help='threshold')
     parser.add_argument('--skip', type=int, default=8)
     args = parser.parse_args()
@@ -20,6 +22,8 @@ def parse_args():
 
 args = parse_args()
 
+scales = args.scales if len(args.scales) == 2 else [args.scales[:3], args.scales[3:]]
+offsets = [args.offsets[:3], args.offsets[3:]]
 threshold = args.threshold
 
 def save_positions_pt(positions, iteration):
@@ -74,9 +78,10 @@ gui = ti.GUI("Taichi Elements", res=512, background_color=0x112F41, show_gui=Fal
 mpm = MPMSolver(res=(128, 128, 128), E_scale=args.E)
 
 pts_list, scaler_list = get_points(
-    scales=[0.5, 0.5],
-    offsets=[[0.25, 0.5, 0.25], [0.25, -0.25, 0.25]]
+    scales=scales,
+    offsets=offsets
 )
+
 material_list = {
     'elastic': MPMSolver.material_elastic,
     'sand': MPMSolver.material_sand,
