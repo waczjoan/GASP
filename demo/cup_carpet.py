@@ -29,7 +29,7 @@ threshold = args.threshold
 def save_positions_pt(positions, iteration):
     positions = np.split(positions, [len(pts_list[0])])
     for i, x in zip(range(2), positions):
-        x = scaler_list[i].inverse(x)
+        x = scaler_list[i].inverse(x, scaler_list[1].scale, scaler_list[1].max,  scaler_list[1].min, scaler_list[1].offset)
         positions_tensor = torch.from_numpy(x)
         filename = args.out_dir[i] + f'/triangles/{iteration:04d}.pt'
         torch.save(positions_tensor, filename)
@@ -48,8 +48,12 @@ class Rescale:
     def transform(self, x):
         return self.scale * (x - self.min) / (self.max - self.min) + self.offset
     
-    def inverse(self, x):
-        return x / self.scale * (self.max - self.min)
+    def inverse(self, x, new_scale=None, new_max=None, new_min=None, new_offset=None):
+        scale = self.scale if new_scale is None else new_scale
+        new_max = self.max if new_max is None else new_max
+        new_min = self.min if new_min is None else new_min
+        offset = self.offset if new_offset is None else new_offset
+        return (x - offset) / scale * (new_max - new_min) + new_min
 
 def get_points(scales, offsets):
     pts_list = []
@@ -65,7 +69,7 @@ def get_points(scales, offsets):
         scaler_list.append(scaler)
     return pts_list, scaler_list
 
-write_to_disk = args.out_dir is not None
+write_to_disk = args.out_dir[0] is not None
 if write_to_disk:
     for out_dir in args.out_dir:
         os.makedirs(f'{out_dir}/triangles', exist_ok=True)
@@ -75,7 +79,7 @@ ti.init(arch=ti.gpu, device_memory_fraction=0.9)
 
 gui = ti.GUI("Taichi Elements", res=512, background_color=0x112F41, show_gui=False)
 
-mpm = MPMSolver(res=(128, 128, 128), E_scale=args.E)
+mpm = MPMSolver(res=(64, 64, 64), E_scale=args.E)
 
 pts_list, scaler_list = get_points(
     scales=scales,
@@ -131,7 +135,7 @@ for frame in range(200):
     modify_positions()
     particles = mpm.particle_info()
     np_x = particles['position']
-    screen_x = (np_x[:, 0]) #((np_x[:, 0] + np_x[:, 2]) / 2**0.5) - 0.2
+    screen_x = ((np_x[:, 0] + np_x[:, 2]) / 2**0.5) - 0.2
     screen_y = (np_x[:, 1])
     screen_pos = np.stack([screen_x, screen_y], axis=-1)
     if frame % args.skip == 0:
