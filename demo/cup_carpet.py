@@ -22,14 +22,14 @@ def parse_args():
 
 args = parse_args()
 
-scales = args.scales if len(args.scales) == 2 else [args.scales[:3], args.scales[3:]]
-offsets = [args.offsets[:3], args.offsets[3:]]
+scales = args.scales if len(args.scales) == 2 else np.split(args.scales, 3)
+offsets = np.split(args.offsets, 3)
 threshold = args.threshold
 
 def save_positions_pt(positions, iteration):
     positions = np.split(positions, [len(pts_list[0])])
     for i, x in zip(range(2), positions):
-        x = scaler_list[i].inverse(x, scaler_list[1].scale, scaler_list[1].max,  scaler_list[1].min, scaler_list[1].offset)
+        x = scaler_list[i].inverse(x, scaler_list[-1].scale, scaler_list[-1].max,  scaler_list[-1].min, scaler_list[-1].offset)
         positions_tensor = torch.from_numpy(x)
         filename = args.out_dir[i] + f'/triangles/{iteration:04d}.pt'
         torch.save(positions_tensor, filename)
