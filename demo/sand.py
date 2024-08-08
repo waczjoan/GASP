@@ -53,14 +53,14 @@ class Rescale:
 
 def get_points():
     pts_list = []
-    for path in zipargs.in_dir:
+    for path in args.in_dir:
         pts = torch.load(f'{path}/vertices.pt').cpu().numpy()
         pts[:, 1] = -pts[:, 1]
         pts = pts[:, [0, 2, 1]]
         pts_list.append(pts)
 
     tmp = np.concatenate(pts_list)
-    scaler = Rescale(scale, offset)
+    scaler = Rescale()
     scaler.fit(tmp)
     for i in range(4):
         pts_list[i] = scaler.transform(pts_list[i])
