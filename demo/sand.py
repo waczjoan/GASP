@@ -51,9 +51,9 @@ class Rescale:
         offset = self.offset if new_offset is None else new_offset
         return (x - offset) / scale * (new_max - new_min) + new_min
 
-def get_points(scales, offsets):
+def get_points():
     pts_list = []
-    for path, scale, offset in zip(args.in_dir, scales, offsets):
+    for path in zipargs.in_dir:
         pts = torch.load(f'{path}/vertices.pt').cpu().numpy()
         pts[:, 1] = -pts[:, 1]
         pts = pts[:, [0, 2, 1]]
