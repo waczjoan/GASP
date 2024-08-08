@@ -105,7 +105,8 @@ for frame in range(200):
     screen_x = (np_x[:, 0]) #((np_x[:, 0] + np_x[:, 2]) / 2**0.5) - 0.2
     screen_y = (np_x[:, 1])
     screen_pos = np.stack([screen_x, screen_y], axis=-1)
-    save_positions_pt(particles['position'], frame)
+    if frame % args.skip == 0:
+        save_positions_pt(particles['position'], frame)
     gui.circles(screen_pos,
                 radius=1.5,
                 color=colors[particles['material']])
