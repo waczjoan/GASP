@@ -67,7 +67,7 @@ scaler = Rescale()
 scaler.fit(pts)
 pts = scaler.transform(pts)
 
-mpm = MPMSolver(res=(128, 128, 128), E_scale=args.E)
+mpm = MPMSolver(res=(64, 64, 64), E_scale=args.E)
 
 mpm.add_particles(particles=pts,
                 material=material)
