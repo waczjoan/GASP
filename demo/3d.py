@@ -14,6 +14,7 @@ def parse_args():
     parser.add_argument('--E', type=float, help='youngs modulus')
     parser.add_argument('--threshold', type=float, default=1.0, help='threshold')
     parser.add_argument('--skip', type=int, default=8)
+    parser.add_argument('--iters', type=int, default=100)
     args = parser.parse_args()
     print(args)
     return args
@@ -93,7 +94,7 @@ def modify_positions():
             if new_scales[idx] / init_scales[idx] > threshold:
                 mpm.x[idx] = m + threshold * init_scales[idx] * v
 
-for frame in range(200):
+for frame in range(args.iters):
     mpm.step(1e-2)
     colors = np.array([0x068587, 0xED553B, 0xEEEEF0, 0xFFFF00],
                     dtype=np.uint32)
