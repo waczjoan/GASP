@@ -12,6 +12,8 @@ def parse_args():
     parser.add_argument('-o', '--out-dir', type=str, help='Output folder')
     parser.add_argument('--material', type=str, help='material type')
     parser.add_argument('--E', type=float, help='youngs modulus')
+    parser.add_argument('--scales', type=float, nargs='+')
+    parser.add_argument('--offsets', type=float, nargs='+')
     parser.add_argument('--threshold', type=float, default=1.0, help='threshold')
     parser.add_argument('--skip', type=int, default=8)
     parser.add_argument('--iters', type=int, default=100)
@@ -30,19 +32,21 @@ def save_positions_pt(positions, iteration):
     torch.save(positions_tensor, filename)
 
 class Rescale:
-    def __init__(self):
+    def __init__(self, scale, offset):
         self.min = None
         self.max = None
+        self.scale = scale
+        self.offset = np.array(offset)
     
     def fit(self, x):
         self.min = x.min(axis=0)
         self.max = x.max(axis=0)
     
     def transform(self, x):
-        return 0.5 * (x - self.min) / (self.max - self.min) + np.array([0.25, 0.5, 0.25])
+        return self.scale * (x - self.min) / (self.max - self.min) + self.offset
     
     def inverse(self, x):
-        return 2 * x * (self.max - self.min)
+        return (x - self.offset) / self.scale * (self.max - self.min) + self.min
 
 ti.init(arch=ti.gpu, device_memory_fraction=0.9) 
 
@@ -64,7 +68,7 @@ gui = ti.GUI("Taichi Elements", res=512, background_color=0x112F41, show_gui=Fal
 pts = torch.load(f'{args.in_dir}/vertices.pt').cpu().numpy()
 pts[:, 1] = -pts[:, 1]
 pts = pts[:, [0, 2, 1]]
-scaler = Rescale()
+scaler = Rescale(args.scales, args.offsets)
 scaler.fit(pts)
 pts = scaler.transform(pts)
 
