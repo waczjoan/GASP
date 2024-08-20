@@ -127,9 +127,12 @@ def modify_positions():
             elif init_scales[idx] / new_scales[idx] > threshold:
                 mpm.x[idx] = m + 1.0 / threshold * init_scales[idx] * v
 
-init_scales.from_numpy(calc_scales(pts_list))
+particles = mpm.particle_info()
+save_positions_pt(particles['position'], 0)
 
-for frame in range(args.iters):
+init_scales.from_numpy(calc_scales(particles['position']))
+
+for frame in range(1, args.iters + 1):
     mpm.step(1e-2)
     colors = np.array([0x068587, 0xED553B, 0xEEEEF0, 0xFFFF00, 0xCD553B],
                       dtype=np.uint32)
