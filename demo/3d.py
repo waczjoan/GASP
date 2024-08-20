@@ -97,6 +97,8 @@ def modify_positions():
             v = diff / norm
             if new_scales[idx] / init_scales[idx] > threshold:
                 mpm.x[idx] = m + threshold * init_scales[idx] * v
+            elif init_scales[idx] / new_scales[idx] > threshold:
+                mpm.x[idx] = m + 1.0 / threshold * init_scales[idx] * v
 
 for frame in range(args.iters):
     mpm.step(1e-2)

@@ -124,6 +124,8 @@ def modify_positions():
             v = diff / norm
             if new_scales[idx] / init_scales[idx] > threshold:
                 mpm.x[idx] = m + threshold * init_scales[idx] * v
+            elif init_scales[idx] / new_scales[idx] > threshold:
+                mpm.x[idx] = m + 1.0 / threshold * init_scales[idx] * v
 
 init_scales.from_numpy(calc_scales(pts_list))
 
