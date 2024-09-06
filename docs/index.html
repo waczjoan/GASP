@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="description"
-        content="GaSPhys">
-  <meta name="keywords" content="Gaussian Splatting">
+        content="GaSPhyS: Gaussian Splatting for Physic-Based Simulations">
+  <meta name="keywords" content="Gaussian Splatting, Physic">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>D-MiSo</title>
+  <title>GaSPhyS</title>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
         rel="stylesheet">
 
-  <link rel="stylesheet" href="./sta tic/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
   <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
   <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
@@ -32,18 +32,18 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">GaSPhys</h1>
+          <h1 class="title is-1 publication-title">GaSPhyS: Gaussian Splatting for Physic-Based Simulations</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
-                  <a href="">Piotr Borycki</a><sup>1*</sup>,</span>
+              <a href="">Piotr Borycki</a><sup>1*</sup>,</span>
             <span class="author-block">
-               <a href="">Weronika Smolak</a><sup>1*</sup>,</span>
+              <a href="">Weronika Smolak</a><sup>1*</sup>,</span>
             <span class="author-block">
               <a href="">Joanna Waczyńska</a><sup>1</sup>,</span>
             <span class="author-block">
               <a href="">Sławomir Tadeja</a><sup>2</sup>,</span>
             <span class="author-block">
-               <a href="">Marcin Mazur</a><sup>1</sup>,</span>
+                 <a href="">Marcin Mazur</a><sup>1</sup>,</span>
             <span class="author-block">
               <a href="">Przemysław Spurek</a><sup>1</sup>,</span>
           </div>
@@ -58,7 +58,7 @@
             <div class="publication-links">
               <!-- PDF Link. -->
               <span class="link-block">
-                <a href="https://arxiv.org/pdf/todo"
+                <a href="https://arxiv.org/pdf/TODO"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="ai ai-arxiv"></i>
@@ -68,7 +68,7 @@
               </span>
               <!-- Code Link. -->
               <span class="link-block">
-                <a href="https://github.com/waczjoan/GaSPhys"
+                <a href="https://github.com/waczjoan/GaSPhyS"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fab fa-github"></i>
@@ -81,7 +81,6 @@
       </div>
     </div>
   </div>
-  </div>
 </section>
 
 <section class="section">
@@ -92,15 +91,173 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            TODO
+           Physical simulation is paramount for modeling and utilization of 3D scenes
+            in various real-world applications. However, its integration with state-of-the-art 3D
+            scene rendering techniques such as Gaussian Splatting (GS) remains challenging.
+            Existing models use additional meshing mechanisms, including triangle or tetrahedron
+            meshing, marching cubes, or cage meshes. As an alternative, we can modify the
+            physically grounded Newtonian dynamics to align with 3D Gaussian components.
+            Current models take the first-order approximation of a deformed kernel, which
+            locally approximates the dynamics by linear transformations. In contrast, our Gaussian Splatting for
+            Physics-Based Simulations (GaSPhyS) model uses a deformed kernel without any modifications and flat Gaussian distributions,
+            which are parameterized by three points (mesh faces).
+            Subsequently, each 3D point (mesh face node) is treated
+            as a discrete entity within a 3D space. Consequently,
+            the problem of modeling Gaussian components is reduced to
+            working with 3D points. Additionally, the information on mesh
+            faces can be used to incorporate further properties into the physical model,
+            facilitating the use of triangles. Resulting solution can be integrated
+            into any physical engine can be treated as a black box.
+            As demonstrated in our studies, the proposed model exhibits superior performance
+            on a diverse range of benchmark datasets designed for 3D object rendering.
           </p>
-         
-        </div>
-        
+          </div>
+
       </div>
     </div>
+    <!--/ Abstract. -->
+    <img src="./static/images/schema.png" alt="Pipeline scheme" width="100%">
+      <h6 class="subtitle has-text-centered">
+        <span class="dnerf">GaSPhyS</span> produces physical simulations in flat GS. It works with static GS models like GaMeS or dynamic ones like D-MiSo.  (In general, GaSPhyS can be applied to any GS-based model which uses flat Gaussians.)  First, we take the flat Gaussianand convert it to the GaMeS format.  Each flat Gaussian component is converted to three points (triangle face).  Then, the physical engineis run on a point cloud to obtain trajectories for our 3D model.
+        Finally, we convert points into Gaussian components by reverse GaMeS parametrization
+      </h6>
   </div>
 </section>
+
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-start" class="carousel results-carousel">
+        <div class="item item-balls">
+          <video poster="" id="start" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/standup/start.gif"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-mid">
+          <video poster="" id="mid" autoplay controls muted loop playsinline width="100%">
+             <source src="./static/videos/standup/mid.gif"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-finish">
+          <video poster="" id="finish" autoplay controls muted loop playsinline width="100%">
+             <source src="./static/videos/standup/finish.gif"
+                    type="video/gif">
+          </video>
+        </div>
+      </div>
+    </div>
+    <h2 class="subtitle has-text-centered">
+      <span>GaSPhy model can work with dynamic scenes. In the example w model dynamic 3D scenes by D-MiSo and physical properties to the selected frame of dynamic scenes</span>
+    </h2>
+  </div>
+</section>
+
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-rug" class="carousel results-carousel">
+        <div class="item item-balls">
+          <video poster="" id="rug" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/rug/rug.gif"
+                    type="video/gif">
+          </video>
+        </div>
+          <div class="item item-duck">
+          <video poster="" id="duck" autoplay controls muted loop playsinline width="100%">
+             <source src="./static/videos/more/duck_and_table.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-car">
+          <video poster="" id="car" autoplay controls muted loop playsinline width="100%">
+             <source src="./static/videos/car/car.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-car1">
+          <video poster="" id="car1" autoplay controls muted loop playsinline width="100%">
+             <source src="./static/videos/car/car_1.gif"
+                    type="video/gif">
+          </video>
+        </div>
+      </div>
+    </div>
+    <h2 class="subtitle has-text-centered">
+      <span>GaSPhy model can work with multiple objects.</span>
+    </h2>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-cup" class="carousel results-carousel">
+        <div class="item item-balls">
+          <video poster="" id="cup" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/more/cup.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+          <div class="item item-duck">
+          <video poster="" id="duck1" autoplay controls muted loop playsinline width="100%">
+             <source src="./static/videos/more/duck.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-table">
+          <video poster="" id="table1" autoplay controls muted loop playsinline width="100%">
+             <source src="./static/videos/more/table.gif"
+                    type="video/gif">
+          </video>
+        </div>
+        <div class="item item-car">
+          <video poster="" id="fox1" autoplay controls muted loop playsinline width="100%">
+             <source src="./static/videos/more/fox_1.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-car1">
+          <video poster="" id="fox2" autoplay controls muted loop playsinline width="100%">
+             <source src="./static/videos/more/fox_2.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+    <h2 class="subtitle has-text-centered">
+      <span>Few more examples.</span>
+    </h2>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-problem" class="carousel results-carousel">
+        <div class="item item-balls">
+          <video poster="" id="problem" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/artefacts/problem.gif"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-mid">
+          <video poster="" id="solved" autoplay controls muted loop playsinline width="100%">
+             <source src="./static/videos/artefacts/solved.gif"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+    <h2 class="subtitle has-text-centered">
+      <span>GaSPhy handle artifacts.</span>
+    </h2>
+  </div>
+</section>
+
 
 <footer class="footer" style="padding: 25px 0px 25px 0px">
   <div class="columns is-centered">
@@ -112,12 +269,13 @@
           Commons Attribution-ShareAlike 4.0 International License</a>.
         </p>
         <p style="text-align: center">
-          The source code is borrowed from <a href="https://github.com/nerfies/nerfies.github.io">nerfies.</a>
+          The souce code is borrowed from <a href="https://github.com/nerfies/nerfies.github.io">nerfies.</a>
           We thank the authors for sharing the template.
         </p>
       </div>
     </div>
   </div>
+</div>
 </footer>
 
 </body>
