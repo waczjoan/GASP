@@ -2335,8 +2335,8 @@ var defaultOptions = {
     slidesToScroll: 2
   }, {
     changePoint: 768,
-    slidesToShow: 3,
-    slidesToScroll: 3
+    slidesToShow: 2,
+    slidesToScroll: 2
   }],
 
   onReady: null,
