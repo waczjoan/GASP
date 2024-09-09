@@ -20,6 +20,6 @@ any physical engine that can be treated as a black box. As demonstrated in our s
 the proposed model exhibits superior performance on a diverse
 range of benchmark datasets designed for 3D object rendering.
 
-Project Page under the [LINK](https://waczjoan.github.io/GaSPhys/).
+Project Page under the [LINK](https://waczjoan.github.io/GASP/).
 
 Wait for it...
