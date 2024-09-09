@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="description"
-        content="GaSPhyS: Gaussian Splatting for Physic-Based Simulations">
+        content="GASP: Gaussian Splatting for Physic-Based Simulations">
   <meta name="keywords" content="Gaussian Splatting, Physic">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GaSPhyS</title>
+  <title>GASP</title>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
         rel="stylesheet">
@@ -32,7 +32,7 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">GaSPhyS: Gaussian Splatting for Physic-Based Simulations</h1>
+          <h1 class="title is-1 publication-title">GASP: Gaussian Splatting for Physic-Based Simulations</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
               <a href="">Piotr Borycki</a><sup>1*</sup>,</span>
@@ -68,7 +68,7 @@
               </span>
               <!-- Code Link. -->
               <span class="link-block">
-                <a href="https://github.com/waczjoan/GaSPhyS"
+                <a href="https://github.com/waczjoan/GASP"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fab fa-github"></i>
@@ -91,25 +91,25 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-           Physical simulation is paramount for modeling and utilization of 3D scenes
-            in various real-world applications. However, its integration with state-of-the-art 3D
-            scene rendering techniques such as Gaussian Splatting (GS) remains challenging.
-            Existing models use additional meshing mechanisms, including triangle or tetrahedron
-            meshing, marching cubes, or cage meshes. As an alternative, we can modify the
-            physically grounded Newtonian dynamics to align with 3D Gaussian components.
-            Current models take the first-order approximation of a deformed kernel, which
-            locally approximates the dynamics by linear transformations. In contrast, our Gaussian Splatting for
-            Physics-Based Simulations (GaSPhyS) model uses a deformed kernel without any modifications and flat Gaussian distributions,
-            which are parameterized by three points (mesh faces).
-            Subsequently, each 3D point (mesh face node) is treated
-            as a discrete entity within a 3D space. Consequently,
-            the problem of modeling Gaussian components is reduced to
-            working with 3D points. Additionally, the information on mesh
-            faces can be used to incorporate further properties into the physical model,
-            facilitating the use of triangles. Resulting solution can be integrated
-            into any physical engine can be treated as a black box.
-            As demonstrated in our studies, the proposed model exhibits superior performance
-            on a diverse range of benchmark datasets designed for 3D object rendering.
+          Physical simulation is paramount for modeling and
+            utilization of 3D scenes in various real-world
+            applications. However, its integration with state-of-the-art 3D
+            scene rendering techniques such as Gaussian Splatting (GS) remains
+            challenging. Existing models use additional meshing mechanisms,
+            including triangle or tetrahedron meshing, marching cubes, or cage meshes.
+            As an alternative, we can modify the physically grounded Newtonian dynamics
+            to align with 3D Gaussian components. Current models take the first-order
+            approximation of a deformation map, which locally approximates the dynamics by
+            linear transformations. In contrast, our Gaussian Splatting for Physics-Based
+            Simulations (GASP) model uses such a map (without any modifications) and
+            flat Gaussian distributions, which are parameterized by three points (mesh faces).
+            Subsequently, each 3D point (mesh face node) is treated as a discrete entity within a 3D space.
+            Consequently, the problem of modeling Gaussian components is reduced to working with 3D points.
+            Additionally, the information on mesh faces can be used to incorporate further properties into
+            the physical model, facilitating the use of triangles. Resulting solution can be integrated into
+            any physical engine that can be treated as a black box. As demonstrated in our studies,
+            the proposed model exhibits superior performance on a diverse
+            range of benchmark datasets designed for 3D object rendering.
           </p>
           </div>
 
@@ -118,7 +118,7 @@
     <!--/ Abstract. -->
     <img src="./static/images/schema.png" alt="Pipeline scheme" width="100%">
       <h6 class="subtitle has-text-centered">
-        <span class="dnerf">GaSPhyS</span> produces physical simulations in flat GS. It works with static GS models like GaMeS or dynamic ones like D-MiSo.  (In general, GaSPhyS can be applied to any GS-based model which uses flat Gaussians.)  First, we take the flat Gaussianand convert it to the GaMeS format.  Each flat Gaussian component is converted to three points (triangle face).  Then, the physical engineis run on a point cloud to obtain trajectories for our 3D model.
+        <span class="dnerf">GASP</span> produces physical simulations in flat GS. It works with static GS models like GaMeS or dynamic ones like D-MiSo.  (In general, GASP can be applied to any GS-based model which uses flat Gaussians.)  First, we take the flat Gaussianand convert it to the GaMeS format.  Each flat Gaussian component is converted to three points (triangle face).  Then, the physical engineis run on a point cloud to obtain trajectories for our 3D model.
         Finally, we convert points into Gaussian components by reverse GaMeS parametrization
       </h6>
   </div>
@@ -144,7 +144,7 @@
        </div>
       </div>
     <h2 class="subtitle has-text-centered">
-      <span>GaSPhyS model can work with dynamic scenes. In the example w model dynamic 3D scenes by D-MiSo and physical properties to the selected frame of dynamic scenes.</span>
+      <span>GASP model can work with dynamic scenes. In the example w model dynamic 3D scenes by D-MiSo and physical properties to the selected frame of dynamic scenes.</span>
     </h2>
 </section>
 
@@ -200,7 +200,7 @@ Essentially, Our model utilizes set of triangle soup to parameterize Gaussian co
        </div>
       </div>
     <h2 class="subtitle has-text-centered">
-      <span>Results obtained by GaSPhys on scene bonsai and fox. We can add extra element like falling ducks.</span>
+      <span>Results obtained by GASP on scene bonsai and fox. We can add extra element like falling ducks.</span>
     </h2>
 </section>
 
@@ -252,11 +252,63 @@ Essentially, Our model utilizes set of triangle soup to parameterize Gaussian co
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel1" class="carousel results-carousel">
+        <div class="item sand">
+          <video poster="" id="sand1" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/more/sand.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item duck">
+          <video poster="" id="trex1" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/more/duck.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item hellwarrior">
+          <video poster="" id="hell1" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/more/hellwarrior.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+                <div class="item teddy">
+          <video poster="" id="teddy1" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/more/teddybear.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item cup">
+          <video poster="" id="cup1" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/more/cup.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item rug">
+          <video poster="" id="rug1" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/rug/rug.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item jumpingjacks">
+          <video poster="" id="jumpingjacks1" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/jumpingjacks/falling.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
     <h2 class="subtitle has-text-centered">
       <span>More examples</span>
     </h2>
   </div>
 </section>
+
 
 
 <section class="section">
