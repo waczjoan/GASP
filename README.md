@@ -1,4 +1,4 @@
-# GASP
+# GASP: Gaussian Splatting for Physics-Based Simulations
 
 Physical simulation is paramount for modeling and
 utilization of 3D scenes in various real-world
