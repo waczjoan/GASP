@@ -21,5 +21,10 @@ the proposed model exhibits superior performance on a diverse
 range of benchmark datasets designed for 3D object rendering.
 
 Project Page under the [LINK](https://waczjoan.github.io/GASP/).
+</br>
+<img src="./docs/static/videos/car/car.gif" width="250" height="250"/>
+<img src="./docs/static/videos/more/cup.gif" width="250" height="250"/>
+</br>
+
 
 Wait for it...
