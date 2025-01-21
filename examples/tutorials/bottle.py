@@ -8,8 +8,8 @@ gs.init()
 
 scene = gs.Scene(
     sim_options=gs.options.SimOptions(
-        dt=4e-3,
-        substeps=10,
+        dt=1e-2,
+        substeps=100,
     ),
     mpm_options=gs.options.MPMOptions(
         # lower_bound=(-0.5, -1.0, 0.0),
@@ -59,10 +59,28 @@ scene.build()
 
 ########################## build ##########################
 
+
+def calc_scales(pts):
+    if isinstance(pts, list):
+        pts = torch.concatenate(pts)
+    x = pts
+    scales = x.reshape((-1, 3, 3))
+    scales = scales - scales[:, 0, :].unsqueeze(-2)
+    scales = torch.linalg.norm(scales, axis=-1)
+    return scales.reshape(-1, 1)
+
+def clamp_pos(x, init_scales, threshold=1.5):
+    scales = calc_scales(x).expand(-1, 3)
+    return torch.where(scales > threshold * init_scales, x + threshold * init_scales, x)
+
+
+init_scales = calc_scales(mesh.get_state().pos[mesh.particle_start:mesh.particle_end]).expand(-1, 3)
+
 horizon = 800
 for i in range(horizon + 1):
     scene.step()
     if i % 4 == 0:
+        mesh.get_state().pos[mesh.particle_start:mesh.particle_end] = clamp_pos(mesh.get_state().pos[mesh.particle_start:mesh.particle_end], init_scales)
         torch.save(
             torch.tensor(mesh.get_state().pos[mesh.particle_start:mesh.particle_end].clone().detach().to("cpu")).reshape(-1, 3, 3),
             os.path.join(SAVE_PATH, f"{i:05d}.pt")
