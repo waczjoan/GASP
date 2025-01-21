@@ -66,11 +66,11 @@ def trimesh_to_particles_simple(mesh, p_size, sampler):
     if not os.path.exists(ptc_file_path):
         with gs.logger.timer(f"Sampling particles with ~<{sampler}>~ sampler and generating `.ptc` file:"):
             # sample a cube first
-            box_size = mesh.bounds[1] - mesh.bounds[0]
-            box_center = (mesh.bounds[1] + mesh.bounds[0]) / 2
-            positions = _box_to_particles(p_size=p_size, pos=box_center, size=box_size, sampler=sampler)
+            # box_size = mesh.bounds[1] - mesh.bounds[0]
+            # box_center = (mesh.bounds[1] + mesh.bounds[0]) / 2
+            positions = mesh.vertices #_box_to_particles(p_size=p_size, pos=box_center, size=box_size, sampler=sampler)
             # reject out-of-boundary particles
-            positions = positions[igl.signed_distance(positions, mesh.vertices, mesh.faces)[0] < 0]
+            #positions = positions[igl.signed_distance(positions, mesh.vertices, mesh.faces)[0] < 0]
 
             os.makedirs(os.path.dirname(ptc_file_path), exist_ok=True)
             pkl.dump(positions, open(ptc_file_path, "wb"))
