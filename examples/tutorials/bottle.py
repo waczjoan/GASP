@@ -47,7 +47,7 @@ MODEL_PATH="output\\bottle"
 OBJ_PATH=os.path.join(MODEL_PATH, "pseudomesh_info\\ours_30000\\scale_1.obj")
 SAVE_PATH=os.path.join(MODEL_PATH, "genesis_triangles", MATERIAL)
 os.makedirs(SAVE_PATH, exist_ok=True)
-SCALE=0.4
+SCALE=0.5
 mesh = scene.add_entity(
     material=materials[MATERIAL](sampler="random"),#(E=1e5, nu=0.1, rho=1000),
     morph=gs.morphs.Mesh(file=OBJ_PATH, convexify=False, decompose_nonconvex=False, scale=SCALE)
@@ -75,7 +75,7 @@ scene.build()
 
 # init_scales = calc_scales(mesh.get_state().pos[mesh.particle_start:mesh.particle_end]).expand(-1, 3).cpu()
 
-horizon = 100
+horizon = 150
 for i in range(horizon + 1):
     scene.step()
     # if i % 2 == 0:
