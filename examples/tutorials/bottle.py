@@ -42,7 +42,7 @@ materials = {
     "snow": gs.materials.MPM.Snow,
 }
 
-MATERIAL="sand"
+MATERIAL="elastic"
 MODEL_PATH="output\\bottle"
 OBJ_PATH=os.path.join(MODEL_PATH, "pseudomesh_info\\ours_30000\\scale_1.obj")
 SAVE_PATH=os.path.join(MODEL_PATH, "genesis_triangles", MATERIAL)
@@ -58,28 +58,29 @@ scene.build()
 ########################## build ##########################
 
 
-def calc_scales(pts):
-    if isinstance(pts, list):
-        pts = torch.concatenate(pts)
-    x = pts
-    scales = x.reshape((-1, 3, 3))
-    scales = scales - scales[:, 0, :].unsqueeze(-2)
-    scales = torch.linalg.norm(scales, axis=-1)
-    return scales.reshape(-1, 1)
+# def calc_scales(pts):
+#     if isinstance(pts, list):
+#         pts = torch.concatenate(pts)
+#     x = pts
+#     scales = x.reshape((-1, 3, 3))
+#     scales = scales - scales[:, 0, :].unsqueeze(-2)
+#     scales = torch.linalg.norm(scales, axis=-1)
+#     return scales.reshape(-1, 1)
 
-def clamp_pos(x, init_scales, threshold=1.5):
-    scales = calc_scales(x).expand(-1, 3)
-    return torch.where(scales > threshold * init_scales, x + threshold * init_scales, x)
+# def clamp_pos(x, init_scales, threshold=1.5):
+#     x = x.cpu()
+#     scales = calc_scales(x).expand(-1, 3)
+#     return torch.where(scales > threshold * init_scales, x + threshold * init_scales, x).cuda()
 
 
-init_scales = calc_scales(mesh.get_state().pos[mesh.particle_start:mesh.particle_end]).expand(-1, 3)
+# init_scales = calc_scales(mesh.get_state().pos[mesh.particle_start:mesh.particle_end]).expand(-1, 3).cpu()
 
-horizon = 800
+horizon = 100
 for i in range(horizon + 1):
     scene.step()
-    if i % 4 == 0:
-        mesh.get_state().pos[mesh.particle_start:mesh.particle_end] = clamp_pos(mesh.get_state().pos[mesh.particle_start:mesh.particle_end], init_scales)
-        torch.save(
-            torch.tensor(mesh.get_state().pos[mesh.particle_start:mesh.particle_end].clone().detach().to("cpu")).reshape(-1, 3, 3),
-            os.path.join(SAVE_PATH, f"{i:05d}.pt")
-        )
+    # if i % 2 == 0:
+        # mesh.get_state().pos[mesh.particle_start:mesh.particle_end] = clamp_pos(mesh.get_state().pos[mesh.particle_start:mesh.particle_end], init_scales).cuda()
+    torch.save(
+        torch.tensor(mesh.get_state().pos[mesh.particle_start:mesh.particle_end].clone().detach().to("cpu")).reshape(-1, 3, 3),
+        os.path.join(SAVE_PATH, f"{i:05d}.pt")
+    )
