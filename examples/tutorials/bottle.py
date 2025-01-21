@@ -12,8 +12,6 @@ scene = gs.Scene(
         substeps=100,
     ),
     mpm_options=gs.options.MPMOptions(
-        # lower_bound=(-0.5, -1.0, 0.0),
-        # upper_bound=(0.5, 1.0, 1),
         lower_bound=(-1.0, -1.0, -1.0),
         upper_bound=(1.0, 1.0, 1),
     ),
