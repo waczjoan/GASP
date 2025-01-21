@@ -44,14 +44,14 @@ materials = {
     "snow": gs.materials.MPM.Snow,
 }
 
-MATERIAL="elastic"
+MATERIAL="sand"
 MODEL_PATH="output\\bottle"
 OBJ_PATH=os.path.join(MODEL_PATH, "pseudomesh_info\\ours_30000\\scale_1.obj")
 SAVE_PATH=os.path.join(MODEL_PATH, "genesis_triangles", MATERIAL)
 os.makedirs(SAVE_PATH, exist_ok=True)
 SCALE=0.4
 mesh = scene.add_entity(
-    material=gs.materials.MPM.Elastic(sampler="random"),#(E=1e5, nu=0.1, rho=1000),
+    material=materials[MATERIAL](sampler="random"),#(E=1e5, nu=0.1, rho=1000),
     morph=gs.morphs.Mesh(file=OBJ_PATH, convexify=False, decompose_nonconvex=False, scale=SCALE)
 )
 
@@ -59,10 +59,11 @@ scene.build()
 
 ########################## build ##########################
 
-horizon = 200
-for i in range(horizon):
+horizon = 800
+for i in range(horizon + 1):
     scene.step()
-    saved_tensor = torch.tensor(mesh.get_state().pos[mesh.particle_start:mesh.particle_end].clone().detach().to("cpu")).reshape(-1, 3, 3)
-    torch.save(saved_tensor, os.path.join(SAVE_PATH, f"{i:05d}.pt"))
-    del saved_tensor
-    torch.cuda.empty_cache()
+    if i % 4 == 0:
+        torch.save(
+            torch.tensor(mesh.get_state().pos[mesh.particle_start:mesh.particle_end].clone().detach().to("cpu")).reshape(-1, 3, 3),
+            os.path.join(SAVE_PATH, f"{i:05d}.pt")
+        )
