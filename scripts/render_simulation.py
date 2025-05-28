@@ -43,13 +43,13 @@ def do_not_transform(vertices, t):
 
 def render_set(
         model_path, name, iteration, views, gaussians,
-        pipeline, background, sym_dirname, skip_sym_obj, scale, camera_view=4
+        pipeline, background, sim_dirname, skip_sym_obj, scale, camera_view=4
     ):
-    render_path = os.path.join(model_path, name, "ours_{}".format(iteration), os.path.basename(sym_dirname))
+    render_path = os.path.join(model_path, name, "ours_{}".format(iteration), os.path.basename(sim_dirname))
     gts_path = os.path.join(model_path, name, "ours_{}".format(iteration), "gt")
     pseudomesh_info_path = os.path.join(model_path, "pseudomesh_info", "ours_{}".format(iteration))
-    #makedirs(f"{sym_dirname}/objects", exist_ok=True)
-    #makedirs(f"{sym_dirname}/objects/scale_{scale}", exist_ok=True)
+    #makedirs(f"{sim_dirname}/objects", exist_ok=True)
+    #makedirs(f"{sim_dirname}/objects/scale_{scale}", exist_ok=True)
 
     makedirs(render_path, exist_ok=True)
     makedirs(gts_path, exist_ok=True)
@@ -57,11 +57,11 @@ def render_set(
     faces = torch.load(f"{pseudomesh_info_path}/faces.pt")
     view = views[camera_view]
 
-    lst = os.listdir(f"{sym_dirname}")  # your directory path
+    lst = os.listdir(f"{sim_dirname}")  # your directory path
     number_files = len(lst)
     for idx in range(0, number_files):
         _idx = '{0:04d}'.format(idx * skip_sym_obj)
-        mesh_scene = trimesh.load(f'{sym_dirname}/{_idx}.obj', force='mesh')
+        mesh_scene = trimesh.load(f'{sim_dirname}/{_idx}.obj', force='mesh')
         vertice = transform_vertices_function(torch.tensor(mesh_scene.vertices)).float()
         traingles = vertice[faces.long()].cuda()/2
         rendering = render(traingles, view, gaussians, pipeline, background)["render"]
@@ -80,7 +80,7 @@ def write_simple_obj(mesh_v, mesh_f, filepath, verbose=False):
 
 def render_sets(
         dataset : ModelParams, iteration : int, pipeline : PipelineParams,
-        skip_train : bool, skip_test : bool, sym_dirname, skip_sym_obj, scale
+        skip_train : bool, skip_test : bool, sim_dirname, skip_sym_obj, scale
     ):
     with torch.no_grad():
         gaussians = PointsGaussianModel(dataset.sh_degree)
@@ -97,7 +97,7 @@ def render_sets(
              render_set(
                  dataset.model_path, "train",
                  scene.loaded_iter, scene.getTrainCameras(),
-                 gaussians, pipeline, background, sym_dirname,
+                 gaussians, pipeline, background, sim_dirname,
                  skip_sym_obj, scale
              )
 
@@ -105,7 +105,7 @@ def render_sets(
              render_set(
                  dataset.model_path, "test",
                  scene.loaded_iter, scene.getTestCameras(),
-                 gaussians, pipeline, background, sym_dirname,
+                 gaussians, pipeline, background, sim_dirname,
                 skip_sym_obj, scale
             )
 
@@ -117,7 +117,7 @@ if __name__ == "__main__":
     pipeline = PipelineParams(parser)
     parser.add_argument("--iteration", default=-1, type=int)
     parser.add_argument('--gs_type', type=str, default="gs_flat")
-    parser.add_argument('--sym_dirname', type=str)
+    parser.add_argument('--sim_dirname', type=str)
     parser.add_argument('--skip_sym_obj', type=int, default=1)
     parser.add_argument('--scale', type=int, default=1)
     parser.add_argument("--num_splats", nargs="+", type=int, default=[2])
@@ -139,7 +139,7 @@ if __name__ == "__main__":
         pipeline.extract(args),
         args.skip_train,
         args.skip_test,
-        args.sym_dirname,
+        args.sim_dirname,
         args.skip_sym_obj,
         args.scale
     )

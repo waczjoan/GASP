@@ -29,7 +29,7 @@ def write_simple_obj(mesh_v, mesh_f, filepath, verbose=False):
         print('mesh saved to: ', filepath)
 
 
-def save_pseudomesh_info(sh_degree, model_path, iteration : int, scale = 100):
+def save_pseudomesh_info(sh_degree, model_path, iteration : int, scale):
     with torch.no_grad():
         gaussians = PointsGaussianModel(sh_degree)
         model = GaussiansLoader(model_path, gaussians, load_iteration=iteration)
@@ -57,11 +57,11 @@ if __name__ == "__main__":
     parser.add_argument("--model_path", type=str)
     parser.add_argument("--iteration", default=-1, type=int)
     parser.add_argument("--sh_degree", default=3, type=int)
-    parser.add_argument('--gs_type', type=str, default="gs_points")
+    parser.add_argument("--scale", default=100, type=int)
     args = parser.parse_args()
 
     print("Pseudomesh info " + args.model_path)
 
     model_path = args.model_path
 
-    save_pseudomesh_info(args.sh_degree, args.model_path, args.iteration)
+    save_pseudomesh_info(args.sh_degree, args.model_path, args.iteration, args.scale)
