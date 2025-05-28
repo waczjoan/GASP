@@ -1,8 +1,31 @@
 import genesis as gs
 import torch
+import argparse
 
 ########################## init ##########################
 gs.init()
+
+materials = {
+    "base": gs.materials.MPM.Base,
+    "elastic": gs.materials.MPM.Elastic,
+    "elastoplastic": gs.materials.MPM.ElastoPlastic,
+    "liquid": gs.materials.MPM.Liquid,
+    "muscle": gs.materials.MPM.Muscle,
+    "sand": gs.materials.MPM.Sand,
+    "snow": gs.materials.MPM.Snow,
+}
+
+######################### get args #########################
+parser = argparse.ArgumentParser()
+parser.add_argument("--obj_path")
+parser.add_argument("--model_path")
+parser.add_argument("--save_path", default=None)
+parser.add_argument("--material", choices=materials.keys())
+args = parser.parse_args()
+material = args.material
+model_path = args.model_path
+obj_path = args.obj_path or os.path.join(model_path, "pseudomesh_info\\ours_30000\\scale_1.obj")
+save_path = args.save_path or os.path.join(model_path, "genesis_triangles", material)
 
 ########################## create a scene ##########################
 
@@ -26,43 +49,23 @@ scene = gs.Scene(
     ),
     show_viewer=True,
 )
-
 ########################## entities ##########################
 plane = scene.add_entity(
     morph=gs.morphs.Plane(pos=(-1, -1, -1)),
 )
-
-
 import os
-materials = {
-    "base": gs.materials.MPM.Base,
-    "elastic": gs.materials.MPM.Elastic,
-    "elastoplastic": gs.materials.MPM.ElastoPlastic,
-    "liquid": gs.materials.MPM.Liquid,
-    "muscle": gs.materials.MPM.Muscle,
-    "sand": gs.materials.MPM.Sand,
-    "snow": gs.materials.MPM.Snow,
-}
-
-MATERIAL="elastic"
-MODEL_PATH="output\\bottle"
-OBJ_PATH=os.path.join(MODEL_PATH, "pseudomesh_info\\ours_30000\\scale_1.obj")
-SAVE_PATH=os.path.join(MODEL_PATH, "genesis_triangles", MATERIAL)
-os.makedirs(SAVE_PATH, exist_ok=True)
+os.makedirs(save_path, exist_ok=True)
 SCALE=0.4
 mesh = scene.add_entity(
     material=gs.materials.MPM.Elastic(sampler="random"),#(E=1e5, nu=0.1, rho=1000),
-    morph=gs.morphs.Mesh(file=OBJ_PATH, convexify=False, decompose_nonconvex=False, scale=SCALE)
+    morph=gs.morphs.Mesh(file=obj_path, convexify=False, decompose_nonconvex=False, scale=SCALE)
 )
-
 scene.build()
-
 ########################## build ##########################
-
 horizon = 200
 for i in range(horizon):
     scene.step()
     saved_tensor = torch.tensor(mesh.get_state().pos[mesh.particle_start:mesh.particle_end].clone().detach().to("cpu")).reshape(-1, 3, 3)
-    torch.save(saved_tensor, os.path.join(SAVE_PATH, f"{i:05d}.pt"))
+    torch.save(saved_tensor, os.path.join(save_path, f"{i:05d}.pt"))
     del saved_tensor
     torch.cuda.empty_cache()
