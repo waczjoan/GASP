@@ -47,7 +47,7 @@ ti.init()
 
 gui = ti.GUI("Taichi Elements", res=512, background_color=0x112F41)
 
-pts = torch.load(f'{args.in_dir}/jumpingjacks_vertices_xz.pt').cpu().numpy()
+pts = torch.load(f'{args.in_dir}/gs_flat_vertices.pt').cpu().numpy()
 
 scaler = Rescale()
 scaler.fit(pts)

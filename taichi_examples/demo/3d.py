@@ -47,7 +47,7 @@ ti.init(arch=ti.gpu, device_memory_GB=12)
 
 gui = ti.GUI("Taichi Elements", res=512, background_color=0x112F41)
 
-pts = torch.load(f'{args.in_dir}/gs_flat____vertices_fish_cup.pt').cpu().numpy()
+pts = torch.load(f'{args.in_dir}/gs_flat_vertices.pt').cpu().numpy()
 pts[:, 1] = -pts[:, 1]
 pts = pts[:, [0, 2, 1]]
 scaler = Rescale()
