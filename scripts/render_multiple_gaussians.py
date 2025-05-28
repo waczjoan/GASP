@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2024, Gmum
+# Copyright (C) 2025, Gmum
 # Group of Machine Learning Research. https://gmum.net/
 # All rights reserved.
 #
@@ -11,21 +11,18 @@
 # This Games software is free for non-commercial, research and evaluation use
 #
 
-import sys
-sys.path.append("games_submodule")
 
 import torch
-from scene import Scene
+from games_submodule.scene import Scene
 import os
-from tqdm import tqdm
 from os import makedirs
 from renderer import render
 import torchvision
 import trimesh
-from utils.general_utils import safe_state
+from games_submodule.utils.general_utils import safe_state
 from argparse import ArgumentParser
-from arguments import ModelParams, PipelineParams
-from games.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
+from games_submodule.arguments import ModelParams, PipelineParams
+from games_submodule.games.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
 import copy
 from gargs import get_combined_args
 

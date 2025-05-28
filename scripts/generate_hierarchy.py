@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2024, Gmum
+# Copyright (C) 2025, Gmum
 # Group of Machine Learning Research. https://gmum.net/
 # All rights reserved.
 #
@@ -10,6 +10,7 @@
 # The Gaussian-mesh-splatting is software based on Gaussian-splatting, used on research.
 # This Games software is free for non-commercial, research and evaluation use
 #
+
 import os
 import torch
 from os import makedirs
@@ -25,7 +26,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation as R
 from sklearn.cluster import Birch
 import torch
-from sklearn.preprocessing import normalize
+#from sklearn.preprocessing import normalize
 
 class GaussiansLoader:
 

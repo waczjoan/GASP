@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2024, Gmum
+# Copyright (C) 2025, Gmum
 # Group of Machine Learning Research. https://gmum.net/
 # All rights reserved.
 #
