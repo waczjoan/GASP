@@ -38,7 +38,7 @@ scene = gs.Scene(
 
 ######################### get args #########################
 parser = argparse.ArgumentParser()
-parser.add_argument("--obj_path")
+parser.add_argument("--obj_path", default=None)
 parser.add_argument("--model_path")
 parser.add_argument("--save_path", default=None)
 parser.add_argument("--material", choices=materials.keys())

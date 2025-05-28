@@ -10,16 +10,13 @@
 # The Gaussian-mesh-splatting is software based on Gaussian-splatting, used on research.
 # This Games software is free for non-commercial, research and evaluation use
 #
-import sys
 import os
-sys.path.append("games_submodule")
 
 import torch
 from os import makedirs
 from loader import GaussiansLoader
-from games.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
+from games_submodule.games.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
 from argparse import ArgumentParser
-import trimesh
 
 
 def write_simple_obj(mesh_v, mesh_f, filepath, verbose=False):

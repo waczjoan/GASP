@@ -11,21 +11,18 @@
 # This Games software is free for non-commercial, research and evaluation use
 #
 
-import sys
-sys.path.append("games_submodule")
-
 import torch
-from scene import Scene
+from games_submodule.scene import Scene
 import os
 from tqdm import tqdm
 from os import makedirs
-from renderer.gaussian_points_animated_renderer import render
+from games_submodule.renderer.gaussian_points_animated_renderer import render
 import torchvision
 import trimesh
-from utils.general_utils import safe_state
+from games_submodule.utils.general_utils import safe_state
 from argparse import ArgumentParser
-from arguments import ModelParams, PipelineParams, get_combined_args
-from games.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
+from games_submodule.arguments import ModelParams, PipelineParams, get_combined_args
+from games_submodule.games.flat_splatting.scene.points_gaussian_model import PointsGaussianModel
 
 
 def transform_vertices_function(vertices, c=1):
@@ -45,14 +42,14 @@ def do_not_transform(vertices, t):
 
 
 def render_set(
-        model_path, name, iteration, views, gaussians, 
+        model_path, name, iteration, views, gaussians,
         pipeline, background, sym_dirname, skip_sym_obj, scale, camera_view=4
     ):
     render_path = os.path.join(model_path, name, "ours_{}".format(iteration), os.path.basename(sym_dirname))
     gts_path = os.path.join(model_path, name, "ours_{}".format(iteration), "gt")
     pseudomesh_info_path = os.path.join(model_path, "pseudomesh_info", "ours_{}".format(iteration))
-    makedirs(f"{sym_dirname}/objects", exist_ok=True)
-    makedirs(f"{sym_dirname}/objects/scale_{scale}", exist_ok=True)
+    #makedirs(f"{sym_dirname}/objects", exist_ok=True)
+    #makedirs(f"{sym_dirname}/objects/scale_{scale}", exist_ok=True)
 
     makedirs(render_path, exist_ok=True)
     makedirs(gts_path, exist_ok=True)
@@ -60,25 +57,16 @@ def render_set(
     faces = torch.load(f"{pseudomesh_info_path}/faces.pt")
     view = views[camera_view]
 
-    lst = os.listdir(f"{sym_dirname}/triangles")  # your directory path
+    lst = os.listdir(f"{sym_dirname}")  # your directory path
     number_files = len(lst)
-    for idx in range(0, number_files, skip_sym_obj):
-        _idx = '{0:04d}'.format(idx)
-        try:
-            mesh_scene = trimesh.load(f'{sym_dirname}/objects/scale_{scale}/{_idx}.obj', force='mesh')
-            triangles = mesh_scene.triangles/scale
-        except:
-            vertice = torch.tensor(torch.load(f'{sym_dirname}/triangles/{_idx}.pt'))
-            vertice = transform_vertices_function(vertice)
-            filename = f'{sym_dirname}/objects/scale_{scale}/{_idx}.obj'
-            write_simple_obj(mesh_v=(vertice * scale).detach().cpu().numpy(), mesh_f=faces, filepath=filename)
-            triangles = vertice[faces.long()].cuda()
-        traingles = torch.tensor(triangles).float().cuda()
-
+    for idx in range(0, number_files):
+        _idx = '{0:04d}'.format(idx * skip_sym_obj)
+        mesh_scene = trimesh.load(f'{sym_dirname}/{_idx}.obj', force='mesh')
+        vertice = transform_vertices_function(torch.tensor(mesh_scene.vertices)).float()
+        traingles = vertice[faces.long()].cuda()/2
         rendering = render(traingles, view, gaussians, pipeline, background)["render"]
-        gt = view.original_image[0:3, :, :]
-        torchvision.utils.save_image(rendering, os.path.join(render_path, '{0:05d}'.format(idx) + ".png"))
-        torchvision.utils.save_image(gt, os.path.join(gts_path, '{0:05d}'.format(idx) + ".png"))
+        torchvision.utils.save_image(rendering, os.path.join(render_path, _idx + ".png"))
+
 
 
 def write_simple_obj(mesh_v, mesh_f, filepath, verbose=False):
@@ -130,8 +118,8 @@ if __name__ == "__main__":
     parser.add_argument("--iteration", default=-1, type=int)
     parser.add_argument('--gs_type', type=str, default="gs_flat")
     parser.add_argument('--sym_dirname', type=str)
-    parser.add_argument('--skip_sym_obj', type=int, default=8)
-    parser.add_argument('--scale', type=int, default=100)
+    parser.add_argument('--skip_sym_obj', type=int, default=1)
+    parser.add_argument('--scale', type=int, default=1)
     parser.add_argument("--num_splats", nargs="+", type=int, default=[2])
     parser.add_argument("--skip_train", action="store_true")
     parser.add_argument("--skip_test", action="store_true")
@@ -140,6 +128,7 @@ if __name__ == "__main__":
     model.gs_type = args.gs_type
     model.num_splats = args.num_splats
     print("Rendering " + args.model_path)
+
 
     # Initialize system state (RNG)
     safe_state(args.quiet)
