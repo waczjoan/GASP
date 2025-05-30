@@ -1,0 +1,3 @@
+[submodule "games_submodule"]
+	path = games_submodule
+	url = https://github.com/waczjoan/gaussian-mesh-splatting.git

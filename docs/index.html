@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="GASP: Gaussian Splatting for Physics-Based Simulations">
+  <meta name="keywords" content="Gaussian Splatting, Physic">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GASP</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">GASP: Gaussian Splatting for Physic-Based Simulations</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="">Piotr Borycki</a><sup>1*</sup>,</span>
+            <span class="author-block">
+              <a href="">Weronika Smolak</a><sup>1*</sup>,</span>
+            <span class="author-block">
+              <a href="">Joanna Waczyńska</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="">Sławomir Tadeja</a><sup>2</sup>,</span>
+            <span class="author-block">
+                 <a href="">Marcin Mazur</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="">Przemysław Spurek</a><sup>1</sup>,</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Jagiellonian University,</span>
+            <span class="author-block"><sup>2</sup>University of Cambridge</span><br>
+            <span class="author-block"><sup>*</sup>Equal contribution</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2409.05819"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/waczjoan/GASP"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+          Physics simulation is paramount for modeling and utilizing 3D scenes in various real-world applications. However, integrating with state-of-the-art 3D scene rendering techniques such as Gaussian Splatting (GS) remains challenging. Existing models use additional meshing mechanisms, including triangle or tetrahedron meshing, marching cubes, or cage meshes. Alternatively, we can modify the physics-grounded Newtonian dynamics to align with 3D Gaussian components. Current models take the first-order approximation of a deformation map, which locally approximates the dynamics by linear transformations. In contrast, our GS for Physics-Based Simulations (GASP) pipeline uses parametrized flat Gaussian distributions.
+  
+            Consequently, the problem of modeling Gaussian components using the physics engine is reduced to working with 3D points. In our work, we present additional rules for manipulating Gaussians, demonstrating how to adapt the pipeline to incorporate meshes, control Gaussian sizes during simulations, and enhance simulation efficiency. This is achieved through the Gaussian grouping strategy, which implements hierarchical structuring and enables simulations to be performed exclusively on selected Gaussians. The resulting solution can be integrated into any physics engine that can be treated as a black box. As demonstrated in our studies, the proposed pipeline exhibits superior performance on a diverse range of benchmark datasets designed for 3D object rendering.
+          </p>
+          </div>
+
+      </div>
+    </div>
+    <!--/ Abstract. -->
+    <img src="./static/images/schema.png" alt="Pipeline scheme" width="100%">
+      <h6 class="subtitle has-text-centered">
+        <span class="dnerf">GASP</span> produces physical simulations in flat GS. It works with static GS models like GaMeS or dynamic ones like D-MiSo.  (In general, GASP can be applied to any GS-based model which uses flat Gaussians.)  First, we take the flat Gaussianand convert it to the GaMeS format.  Each flat Gaussian component is converted to three points (triangle face).  Then, the physical engineis run on a point cloud to obtain trajectories for our 3D model.
+        Finally, we convert points into Gaussian components by reverse GaMeS parametrization
+      </h6>
+  </div>
+</section>
+
+<div class="columns is-centered has-text-centered">
+<video poster="" id="mainvideo" controls muted loop playsinline width="50%" >
+            <source src="GASP main video.mp4"
+                    type="video/mp4">
+          </video>
+  </div>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+        <div class="item item-balls">
+          <video poster="" id="start" autoplay controls muted loop playsinline width="33%">
+            <source src="./static/videos/standup/start.mp4"
+                    type="video/mp4">
+          </video>
+          <video poster="" id="mid" autoplay controls muted loop playsinline width="33%">
+            <source src="./static/videos/standup/mid.mp4"
+                    type="video/mp4">
+          </video>
+          <video poster="" id="finish" autoplay controls muted loop playsinline width="33%">
+            <source src="./static/videos/standup/finish.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+       </div>
+      </div>
+    <h2 class="subtitle has-text-centered">
+      <span>GASP model can work with dynamic scenes. In the example w model dynamic 3D scenes by D-MiSo and physical properties to the selected frame of dynamic scenes.</span>
+    </h2>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+        <div class="item item-balls">
+          <video poster="" id="car" autoplay controls muted loop playsinline width="33%">
+            <source src="./static/videos/car/car.mp4"
+                    type="video/mp4">
+          </video>
+          <video poster="" id="car1" autoplay controls muted loop playsinline width="33%">
+            <source src="./static/videos/car/car_1.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+       </div>
+      </div>
+    <h2 class="subtitle has-text-centered">
+      <span>GASP integrates GS with a physical engine to gener-ate realistic simulations.</span>
+    </h2>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+<p>
+Essentially, Our model utilizes set of triangle soup to parameterize Gaussian components. This approach reduces modifying Gaussian components to 3D point clouds (consisting of vertices of triangles) processing, enabling efficient and rapid rendering
+</p>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+        <div class="item item-balls">
+          <video poster="" id="table" autoplay controls muted loop playsinline width="33%">
+            <source src="./static/videos/more/duck_and_table.mp4"
+                    type="video/mp4">
+          </video>
+          <video poster="" id="table1" autoplay controls muted loop playsinline width="33%">
+            <source src="./static/videos/more/table.mp4"
+                    type="video/mp4">
+          </video>
+                  <video poster="" id="fox1" autoplay controls muted loop playsinline width="15%">
+            <source src="./static/videos/more/fox_1.mp4"
+                    type="video/mp4">
+          </video>
+          <video poster="" id="fox2" autoplay controls muted loop playsinline width="15%">
+            <source src="./static/videos/more/fox_2.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+       </div>
+      </div>
+    <h2 class="subtitle has-text-centered">
+      <span>Results obtained by GASP on scene bonsai and fox. We can add extra element like falling ducks.</span>
+    </h2>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item cup">
+          <video poster="" id="cup" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/more/cup.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item rug">
+          <video poster="" id="rug" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/rug/rug.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item jumpingjacks">
+          <video poster="" id="jumpingjacks" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/jumpingjacks/falling.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item sand">
+          <video poster="" id="sand" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/more/sand.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item duck">
+          <video poster="" id="trex" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/more/duck.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item hellwarrior">
+          <video poster="" id="hell" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/more/hellwarrior.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+                <div class="item teddy">
+          <video poster="" id="teddy" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/more/teddybear.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+                <div class="item ficus">
+          <video poster="" id="ficus" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/ficus/moving.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel1" class="carousel results-carousel">
+        <div class="item sand">
+          <video poster="" id="sand1" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/more/sand.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item duck">
+          <video poster="" id="trex1" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/more/duck.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item hellwarrior">
+          <video poster="" id="hell1" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/more/hellwarrior.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+                <div class="item teddy">
+          <video poster="" id="teddy1" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/more/teddybear.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+         <div class="item ficus">
+          <video poster="" id="ficus1" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/ficus/moving.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item cup">
+          <video poster="" id="cup1" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/more/cup.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item rug">
+          <video poster="" id="rug1" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/rug/rug.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item jumpingjacks">
+          <video poster="" id="jumpingjacks1" autoplay controls muted loop playsinline width="100%">
+            <source src="./static/videos/jumpingjacks/falling.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+    <h2 class="subtitle has-text-centered">
+      <span>More examples</span>
+    </h2>
+  </div>
+</section>
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+<p>
+Model work directly on points extracted from flat Gaussians. In practice, physics moves all particles independently, which can produce artifacts. Therefore, we control the distance of points from each other. If some points are moved extremely far, we automatically correct such behaviors by clipping scaling parameters in GS.
+</p>
+  </div>
+</section>
+
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+        <div class="item item-balls">
+          <video poster="" id="problem" autoplay controls muted loop playsinline width="33%">
+            <source src="./static/videos/artefacts/problem.mp4"
+                    type="video/mp4">
+          </video>
+          <video poster="" id="solved" autoplay controls muted loop playsinline width="33%">
+            <source src="./static/videos/artefacts/solved.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+       </div>
+      </div>
+    <h2 class="subtitle has-text-centered">
+      <span>Illustration of the correction process: The left side highlights the existing issues, while the right side demonstrates the model's effective handling of them.</span>
+    </h2>
+</section>
+
+
+<footer class="footer" style="padding: 25px 0px 25px 0px">
+  <div class="columns is-centered">
+    <div class="column is-8">
+      <div class="content">
+        <p style="text-align: center">
+          This website is licensed under a <a rel="license"
+                                              href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+          Commons Attribution-ShareAlike 4.0 International License</a>.
+        </p>
+        <p style="text-align: center">
+          The souce code is borrowed from <a href="https://github.com/nerfies/nerfies.github.io">nerfies.</a>
+          We thank the authors for sharing the template.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+</footer>
+
+</body>
+</html>
