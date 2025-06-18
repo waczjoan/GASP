@@ -11,6 +11,9 @@
 # This Games software is free for non-commercial, research and evaluation use
 #
 
+import sys
+sys.path.append("games_submodule")
+
 import os
 import torch
 from os import makedirs

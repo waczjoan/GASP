@@ -1,7 +1,6 @@
 import taichi as ti
 import numpy as np
 import torch
-import utils
 from engine.mpm_solver import MPMSolver
 import argparse
 import os
@@ -15,7 +14,7 @@ def parse_args():
     parser.add_argument('--material', type=str, default='elastic', help='material type')
     parser.add_argument('--E', type=float, default=1.0, help='youngs modulus')
     parser.add_argument('--threshold', type=float, default=1.0, help='threshold')
-    parser.add_argument('--skip', type=int, default=8)
+    parser.add_argument('--skip', type=int, default=1)
     parser.add_argument('--iters', type=int, default=100)
     args = parser.parse_args()
     print(args)

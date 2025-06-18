@@ -11,6 +11,8 @@
 # This Games software is free for non-commercial, research and evaluation use
 #
 
+import sys
+sys.path.append("games_submodule")
 
 import torch
 from games_submodule.scene import Scene
@@ -152,7 +154,7 @@ if __name__ == "__main__":
     parser.add_argument("--iteration", default=-1, type=int)
     parser.add_argument('--gs_type', type=str, default="gs_flat")
     parser.add_argument('--sym_dirnames', nargs="+", type=str, default=[])
-    parser.add_argument('--skip_sym_obj', type=int, default=8)
+    parser.add_argument('--skip_sym_obj', type=int, default=1)
     parser.add_argument('--scale', type=int, default=100)
     parser.add_argument("--num_splats", nargs="+", type=int, default=[2])
     parser.add_argument("--model_paths", nargs="+", type=str, default=[])

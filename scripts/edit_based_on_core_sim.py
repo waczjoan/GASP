@@ -9,6 +9,9 @@
 # For inquiries contact  george.drettakis@inria.fr
 #
 
+import sys
+sys.path.append("games_submodule")
+
 import torch
 import struct
 import numpy as np

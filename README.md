@@ -10,7 +10,6 @@ Physics simulation is paramount for modeling and utilizing 3D scenes in various 
 
 </br>
 <img src="./docs/static/videos/car/car.gif" width="250" height="250"/>
-<img src="./docs/static/videos/more/cup.gif" width="250" height="250"/>
 </br>
 
 
@@ -33,7 +32,12 @@ python scripts/generate_hierarchy.py --model_path path/to/games/model --scale 1 
 The threshold parameter controls threshold used for calculating Birch clustering. Scale works analogically like in `create_pseudomesh.py`.
 
 ## Simulations using Blender 
-Load obj file into Blender. Then you can perform simulations using pseudomesh. In the paper, we perform this simulations by manually selecting triangles for simulation, putting them into vertex group and then performing lattice deform operations. After performing simulation using Blender, export `.obj` files (i.e. using script from `scripts/blender_sample_script.py` which was made for Blender 4.0).
+Load obj file into Blender. Then you can perform simulations using pseudomesh. In the paper, we perform this simulations by manually selecting triangles for simulation, putting them into vertex group and then performing lattice deform operations. After performing simulation using Blender, export `.obj` files (i.e. using script from `scripts/blender_sample_script.py` which was made for Blender 4.0+).
+
+If you are interested, you can find exemplary simulation with input files and blend file on [google drive](https://drive.google.com/drive/folders/1k6KUgbaZ9mVBIWN69B1BjIAcZhTtR4ST?usp=sharing) for following ficus simulation:
+</br>
+<img src="./docs/static/videos/ficus/moving.gif" width="250" height="250"/>
+</br>
 
 ## Simulations using Taichi elements
 We provide the code for Taichi MPM simulations in `taichi_examples/demo` path. If you wish to replicate the results, follow instructions from [Taichi elements github](https://github.com/taichi-dev/taichi_elements) and download taichi_elements:
@@ -44,9 +48,19 @@ pip install git+https://github.com/taichi-dev/taichi_elements
 
 We added new files under `demo` directory in the original repository and run it with following arguments:
 
-`--in-dir` - path to input folder where there is `gs_flat_vertices.pt` file with pseudomesh \
+`--in-dir` - path to input folder where there is `vertices.pt` file with pseudomesh \
 `--out-dir` - path where to save results of the simulation
 
+If you are interested, you can find exemplary simulation with input files and blend file on [google drive](https://drive.google.com/drive/folders/1k6KUgbaZ9mVBIWN69B1BjIAcZhTtR4ST?usp=sharing) for following teddybear and fish cup simulation:
+<br>
+<img src="./docs/static/videos/artefacts/solved.gif" width="250" height="250"/>
+</br>
+
+To create this exemplary simulation run:
+```shell
+ python taichi_examples/demo/cup_carpet.py --in-dir output/teddybear/gs_flat/pseudomesh_info/ours_30000/ output/fish_cup/gs_flat/pseudomesh_info/ours_30000/ --scales 0.4 0.4 0.4 0.5 0.5 0.5 --offsets 0.30 0.5 0.30 0.25 0.0 0.25 --out-dir output/taichi_teddybear output/taichi_cup
+```
+or you can use already created bash script in `taichi_examples/sample.sh`
 ## Simulations using Genesis
 We provide the code for simulations from our work in `genesis_examples/examples/tutorials` path. If you wish to replicate our results, follow instructions from [Genesis github](https://github.com/Genesis-Embodied-AI/Genesis) and download Genesis using command below:
 ```shell
@@ -60,10 +74,26 @@ To run the simulation please provide following arguments:
 `--material` - one of the available materials (base, elastic, elastoplastic, liquid, muscle, sand, snow) \
 `--save_path` (optional) - path where to save results of the simulation 
 
+If you are interested, you can find exemplary simulation with input files and blend file on [google drive](https://drive.google.com/drive/folders/1k6KUgbaZ9mVBIWN69B1BjIAcZhTtR4ST?usp=sharing) for following falling bottle simulation:
+<br>
+<img src="./docs/static/videos/bottle/bottle.gif" width="250" height="250"/>
+</br>
+
 ## Generating final renders
-In order to generate final views, use `scripts/render_simulation.py`. Remember to use `--scale` the same as the one used in `create_pseudomesh.py`. For `--sim_dirname` give a path to `obj` files created during simulation with selected engine. For the `--model_path` use the path for the trained GaMeS model with created pseudomesh files by `create_pseudomesh.py`. If you wish to render multiple Gaussian models in the same simulation, use `scripts/render_multiple_gaussians.py` instead.
+In order to generate final views from physical engine, use `scripts/render_simulation.py`. Remember to use `--scale` the same as the one used in `create_pseudomesh.py`. For `--sim_dirname` give a path to `obj` files created during simulation with selected engine. For the `--model_path` use the path for the trained GaMeS model with created pseudomesh files by `create_pseudomesh.py`. If you wish to render multiple Gaussian models in the same simulation, use `scripts/render_multiple_gaussians.py` instead.
 ```shell
 python scripts/render_simulation.py --model_path path/to/games/model --sim_dirname path/to/objs --scale 1
+```
+
+### Example for obj files
+```shell
+python scripts/render_simulation.py --model_path output/ficus --sim_dirname simulations/ficus --scale 1
+```
+
+### Example for pt files and multiple files
+Using example from cup_fish simulation from Taichi:
+```shell
+ python render_multiple_gaussians.py --model_paths output/teddybear/gs_flat/ output/fish_cup/gs_flat/ --sym_dirname output/taichi_teddybear/ output/taichi_cup/ 
 ```
 
 <section class="section" id="BibTeX">

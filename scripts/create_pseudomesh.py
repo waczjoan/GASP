@@ -10,6 +10,10 @@
 # The Gaussian-mesh-splatting is software based on Gaussian-splatting, used on research.
 # This Games software is free for non-commercial, research and evaluation use
 #
+
+import sys
+sys.path.append("games_submodule")
+
 import os
 
 import torch
