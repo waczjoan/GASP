@@ -85,7 +85,7 @@ If you are interested, you can find input files on [google drive](https://drive.
 ```shell
 python examples/tutorials/bottle.py
 ```
-which will create simulation files (pt necessary to generate final renders, see Generating final renders section) under directiory `output/bottle/genesis_triangles/elastic`.
+which will create simulation files (pt necessary to generate final renders, see [Generating final renders section](#generating-final-renders)) under directiory `output/bottle/genesis_triangles/elastic`.
 
 
 ## Generating final renders
