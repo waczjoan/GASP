@@ -278,8 +278,8 @@ index 0000000..109873a
 +    # if i % 2 == 0:
 +        # mesh.get_state().pos[mesh.particle_start:mesh.particle_end] = clamp_pos(mesh.get_state().pos[mesh.particle_start:mesh.particle_end], init_scales).cuda()
 +    torch.save(
-+        torch.tensor(mesh.get_state().pos[mesh.particle_start:mesh.particle_end].clone().detach().to("cpu")).reshape(-1, 3, 3) / SCALE,
-+        os.path.join(SAVE_PATH, f"{i:05d}.pt")
++        torch.tensor(mesh.get_state().pos[mesh.particle_start:mesh.particle_end].clone().detach().to("cpu")).reshape(-1, 3) / SCALE,
++        os.path.join(SAVE_PATH, f"{i:04d}.pt")
 +    )
 diff --git a/genesis/utils/particle.py b/genesis/utils/particle.py
 index aa45e9b..4cc9b82 100644

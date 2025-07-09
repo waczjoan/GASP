@@ -62,22 +62,31 @@ To create this exemplary simulation run:
 ```
 or you can use already created bash script in `taichi_examples/sample.sh`
 ## Simulations using Genesis
-We provide the code for simulations from our work in `genesis_examples/examples/tutorials` path. If you wish to replicate our results, follow instructions from [Genesis github](https://github.com/Genesis-Embodied-AI/Genesis) and download Genesis using command below:
+We provide the code for simulations from our work in `genesis_examples` path. If you wish to replicate our results, firstly clone [Genesis github](https://github.com/Genesis-Embodied-AI/Genesis):
 ```shell
-pip install git+https://github.com/Genesis-Embodied-AI/Genesis.git
+git clone https://github.com/Genesis-Embodied-AI/Genesis
+cd Genesis
+git checkout 0a199c194f2580d92c4fa0bae3771038d2298c3f
 ```
- Additionally, for our simulation we modify a file from Genesis code under `genesis/utils/particle.py`. We attached file after our modifications under `genesis_examples`.
-To run the simulation please provide following arguments:
-
-`--model_path` - path to the model directory \
-`--obj_path` - path to the pseudomesh in obj format if not provided it will search under `{model_path}/pseudomesh_info/ours_30000/scale_1.obj` \
-`--material` - one of the available materials (base, elastic, elastoplastic, liquid, muscle, sand, snow) \
-`--save_path` (optional) - path where to save results of the simulation 
-
-If you are interested, you can find exemplary simulation with input files and blend file on [google drive](https://drive.google.com/drive/folders/1k6KUgbaZ9mVBIWN69B1BjIAcZhTtR4ST?usp=sharing) for following falling bottle simulation:
+Then apply our changes:
+```shell
+cd ..
+cp genesis_examples/genesis_gasp.patch Genesis
+cd Genesis
+git apply genesis_gasp.patch
+pip install .
+```
+Then, you should have a file `examples/tutorials/bottle.py` which was used to create below simulation:
 <br>
 <img src="./docs/static/videos/bottle/bottle.gif" width="250" height="250"/>
 </br>
+
+If you are interested, you can find input files on [google drive](https://drive.google.com/drive/folders/1k6KUgbaZ9mVBIWN69B1BjIAcZhTtR4ST?usp=sharing). After putting file from Genesis/trained_model from google drive into `output` directory in Genesis folder, you should be able to run the simulation as such:
+```shell
+python examples/tutorials/bottle.py
+```
+which will create simulation files (pt necessary to generate final renders, see Generating final renders section) under directiory `output/bottle/genesis_triangles/elastic`.
+
 
 ## Generating final renders
 In order to generate final views from physical engine, use `scripts/render_simulation.py`. Remember to use `--scale` the same as the one used in `create_pseudomesh.py`. For `--sim_dirname` give a path to `obj` files created during simulation with selected engine. For the `--model_path` use the path for the trained GaMeS model with created pseudomesh files by `create_pseudomesh.py`. If you wish to render multiple Gaussian models in the same simulation, use `scripts/render_multiple_gaussians.py` instead.

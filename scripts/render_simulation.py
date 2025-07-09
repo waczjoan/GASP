@@ -64,10 +64,14 @@ def render_set(
     number_files = len(lst)
     for idx in range(0, number_files):
         _idx = '{0:04d}'.format(idx * skip_sym_obj)
-        mesh_scene = trimesh.load(f'{sim_dirname}/{_idx}.obj', force='mesh')
-        vertice = transform_vertices_function(torch.tensor(mesh_scene.vertices)).float()
-        traingles = vertice[faces.long()].cuda()/2
-        rendering = render(traingles, view, gaussians, pipeline, background)["render"]
+        try:
+            mesh_scene = trimesh.load(f'{sim_dirname}/{_idx}.obj', force='mesh')
+            vertice = transform_vertices_function(torch.tensor(mesh_scene.vertices)).float()
+        except:
+            mesh_scene = torch.load(f'{sim_dirname}/{_idx}.pt')
+            vertice = transform_vertices_function(torch.tensor(mesh_scene)).float().cuda()
+        triangles = vertice[faces.long()].cuda()
+        rendering = render(triangles, view, gaussians, pipeline, background)["render"]
         torchvision.utils.save_image(rendering, os.path.join(render_path, _idx + ".png"))
 
 
