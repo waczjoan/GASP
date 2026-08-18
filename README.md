@@ -105,6 +105,12 @@ Using example from cup_fish simulation from Taichi:
  python render_multiple_gaussians.py --model_paths output/teddybear/gs_flat/ output/fish_cup/gs_flat/ --sym_dirname output/taichi_teddybear/ output/taichi_cup/ 
 ```
 
+## Acknowledgments
+The project “Effective rendering of 3D objects using Gaussian Splatting in an Augmented Reality environment” (FENG.02.02-
+IP.05-0114/23) is carried out within the First Team programme of the Foundation for Polish Science co-financed by the Eu-
+ropean Union under the European Funds for Smart Economy 2021-2027 (FENG). The work of P. Spurek was supported by
+the National Science Centre (Poland), Grant No. 2021/43/B/ST6/01456.
+
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">Citations</h2>
